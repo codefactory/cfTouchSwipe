@@ -17,8 +17,7 @@ $('#box').cfTouchSwipe({
 	}
 });
 
-[참고] 어떤 엘리먼트에 cfTouchSwipe를 적용하면 그 엘리먼트 안에서 일어나는 touch 이벤트에 대해 디폴트로 preventDefault 처리를 합니다. 그래서 엘리먼트 안에 있는 링크가 클릭이 안될 수도 있지만
-triggerClick 옵션을 true로 설정하면 이와 같은 문제를 해결할 수 있습니다.
+[참고] 어떤 엘리먼트에 cfTouchSwipe를 적용하면 그 엘리먼트 안에서 일어나는 touch 이벤트에 대해 디폴트로 preventDefault 처리를 합니다. 그래서 엘리먼트 안에 있는 링크가 클릭이 안될 수도 있지만 triggerClick 옵션을 true로 설정하면 이와 같은 문제를 해결할 수 있습니다.
 
 
 ---------------------------------------
@@ -30,7 +29,7 @@ $('#box').cfTouchSwipe({
 	minSwipeLength: 50,		// 사용자가 swipe 했다고 판단하는 최소 거리
 	minMoveLength: 15,		// 이 거리보다 작게 움직이고 triggerClick = true 이면 click 이벤트 trigger
 	triggerClick: true,		// triggerClick false 일 경우 click 이벤트가 발생하지 않음
-	preventDefault: true,	// touchstart, touchmove 이벤트에 대해 preventDefault 할지 여부
+	preventDefault: true,		// touchstart, touchmove 이벤트에 대해 preventDefault 할지 여부
 	swipeLeft: null,		// swipe callback
 	swipeRight: null,		// swipe callback
 	swipeUp: null,			// swipe callback
