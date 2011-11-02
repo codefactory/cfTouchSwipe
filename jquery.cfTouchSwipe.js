@@ -31,7 +31,8 @@
 		endTime = null,
 		touchedElement = null,		// touch가 발생한 element, triggerClick 할 때 사용됨
 		swipeAngle = null,			// swipe 각도, 이 것을 바탕으로 left, right, down, up을 설정
-		swipeDirection = null;		// swipe 방향
+		swipeDirection = null,		// swipe 방향
+		touchEventEnabled = !! ('ontouchstart' in document.documentElement);	// touch event 지원 여부
 		
 	// plugin constructor
 	function Plugin(element, options) {
@@ -47,24 +48,22 @@
 	// initialization logic
 	Plugin.prototype.init = function() {
 		
-		var $this = $(this.element),
-			touchEventEnabled = !! ('ontouchstart' in document.documentElement);
+		var $this = $(this.element);
 		
-		// touch event를 지원하는 브라우저에서만 cfTouchSwipe를 활성화 시킴
-		if (touchEventEnabled) {
+		if (touchEventEnabled) {	// touch event를 지원하는 브라우저에서는 touch event에 리스너 등록
 			$this.bind('touchstart', {element: this.element, options: this.options}, onTouchStart);
 			$this.bind('touchmove', {element: this.element, options: this.options}, onTouchMove);
 			$this.bind('touchend', {element: this.element, options: this.options}, onTouchEnd);
+		} else {		// 그렇지 않은 브라우저에서는 mouse event에 리스너 등록
+			$this.bind('mousedown', {element: this.element, options: this.options}, onTouchStart);
+			$this.bind('mousemove', {element: this.element, options: this.options}, onTouchMove);
+			$this.bind('mouseup', {element: this.element, options: this.options}, onTouchEnd);
 		}
 		
 	};
 	
 	// 사용자가 터치를 시작했을 때 호출
 	function onTouchStart(e) {
-		// 한 손가락으 이벤트에 대해서만 처리, gesture는 처리 안함
-		if (e.originalEvent.touches.length != 1) {
-			return;
-		}
 		
 		var options = e.data.options;
 		
@@ -72,21 +71,35 @@
 			e.preventDefault();
 		}
 		
-		var touch = e.originalEvent.touches[0];
+		if (touchEventEnabled) {	// touch event 지원 브라우저
+			
+			// 한 손가락으 이벤트에 대해서만 처리, gesture는 처리 안함
+			if (e.originalEvent.touches.length != 1) {
+				return;
+			}
+			
+			var touch = e.originalEvent.touches[0];
+			
+			startTime = new Date().getTime();
+			startX = curX = touch.pageX;
+			startY = curY = touch.pageY;
+			isMoving = true;
+			touchedElement = e.target;
+			
+		} else {	// touch event 미지원 브라우저
+			
+			startTime = new Date().getTime();
+			startX = curX = e.pageX;
+			startY = curY = e.pageY;
+			isMoving = true;
+			touchedElement = e.target;
+			
+		}
 		
-		startTime = new Date().getTime();
-		startX = curX = touch.pageX;
-		startY = curY = touch.pageY;
-		isMoving = true;
-		touchedElement = e.target;
 	};
 	
 	// 사용자가 터치를 움직이고 있을 때 호출
 	function onTouchMove(e) {
-		// 한 손가락으 이벤트에 대해서만 처리, gesture는 처리 안함
-		if (e.originalEvent.touches.length != 1) {
-			return;
-		}
 		
 		var options = e.data.options;
 		
@@ -94,11 +107,27 @@
 			e.preventDefault();
 		}
 		
-		var touch = e.originalEvent.touches[0];
+		if (touchEventEnabled) {	// touch event 지원 브라우저
 			
-		if (isMoving) {
-			curX = touch.pageX;
-			curY = touch.pageY;
+			// 한 손가락으 이벤트에 대해서만 처리, gesture는 처리 안함
+			if (e.originalEvent.touches.length != 1) {
+				return;
+			}
+			
+			var touch = e.originalEvent.touches[0];
+				
+			if (isMoving) {
+				curX = touch.pageX;
+				curY = touch.pageY;
+			}
+			
+		} else {	// touch event 미지원 브라우저
+			
+			if (isMoving) {
+				curX = e.pageX;
+				curY = e.pageY;
+			}
+			
 		}
 	};
 	

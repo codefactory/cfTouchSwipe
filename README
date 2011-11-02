@@ -3,6 +3,7 @@
 감사합니다.
 
 모바일기기에서 사용자의 touch swipe 모션에 callback을 사용할 수 있게 해주는 jQuery Plugin 입니다.
+touch event를 지원하지 않는 브라우저(PC 등)에서는 touch event대신 mouse 이벤트를 사용합니다.
 [데모보기] http://codefactory.kr/demos/cftouchswipe
 
 
