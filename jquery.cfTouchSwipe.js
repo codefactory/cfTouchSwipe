@@ -52,13 +52,21 @@
 		var $this = $(this.element);
 		
 		if (touchEventEnabled) {	// touch event를 지원하는 브라우저에서는 touch event에 리스너 등록
-			$this.bind('touchstart', {element: this.element, options: this.options}, onTouchStart);
-			$this.bind('touchmove', {element: this.element, options: this.options}, onTouchMove);
-			$this.bind('touchend', {element: this.element, options: this.options}, onTouchEnd);
+			$this.unbind('touchstart.cfTouchSwipe');
+			$this.unbind('touchmove.cfTouchSwipe');
+			$this.unbind('touchend.cfTouchSwipe');
+			
+			$this.bind('touchstart.cfTouchSwipe', {element: this.element, options: this.options}, onTouchStart);
+			$this.bind('touchmove.cfTouchSwipe', {element: this.element, options: this.options}, onTouchMove);
+			$this.bind('touchend.cfTouchSwipe', {element: this.element, options: this.options}, onTouchEnd);
 		} else {		// 그렇지 않은 브라우저에서는 mouse event에 리스너 등록
-			$this.bind('mousedown', {element: this.element, options: this.options}, onTouchStart);
-			$this.bind('mousemove', {element: this.element, options: this.options}, onTouchMove);
-			$this.bind('mouseup', {element: this.element, options: this.options}, onTouchEnd);
+			$this.unbind('mousedown.cfTouchSwipe');
+			$this.unbind('mousemove.cfTouchSwipe');
+			$this.unbind('mouseup.cfTouchSwipe');
+			
+			$this.bind('mousedown.cfTouchSwipe', {element: this.element, options: this.options}, onTouchStart);
+			$this.bind('mousemove.cfTouchSwipe', {element: this.element, options: this.options}, onTouchMove);
+			$this.bind('mouseup.cfTouchSwipe', {element: this.element, options: this.options}, onTouchEnd);
 		}
 		
 	};
